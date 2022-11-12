@@ -1,0 +1,25 @@
+{
+    "name": "employee-database-management",
+    "version": "1.0.0",
+    "description": "A command line database that tracks employees, their roles, and their respective department",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ValPal1320/Employee_Database_Management.git"
+    },
+    "author": "Valeria Gonzalez",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ValPal1320/Employee_Database_Management/issues"
+    },
+    "homepage": "https://github.com/ValPal1320/Employee_Database_Management#readme",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "chalk": "^5.1.2",
+        "console.table": "^0.10.0",
+        "inquirer": "^9.1.4",
+        "mysql2": "^2.3.3"
+    }
+}
