@@ -3,14 +3,15 @@ const mysql2 = require('mysql2');
 const inquirer = import('inquirer');
 require("console.table");
 // const chalk = require('chalk');
+require('dotenv').config();
 
 // Create mysql connection
 const connection = mysql2.createConnection({
-    host: 'localhost',
-    port: 3004,
-    user: 'root',
-    password: 'pickles512',
-    database: 'employee_db'
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
 });
 
 connection.connect(err => {
