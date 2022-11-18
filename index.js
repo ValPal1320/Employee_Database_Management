@@ -1,6 +1,6 @@
 // List of dependencies
 const mysql2 = require('mysql2');
-const inquirer = import('inquirer');
+import inquirer from 'inquirer';
 require("console.table");
 // const chalk = require('chalk');
 require('dotenv').config();
@@ -8,7 +8,6 @@ require('dotenv').config();
 // Create mysql connection
 const connection = mysql2.createConnection({
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE
@@ -39,25 +38,26 @@ const options = {
 
 function startPrompt() {
 
-    inquirer.prompt({
-        type: "list",
-        name: "selection",
-        message: "What would you like to do?",
-        choices: [
-            options.viewAllDepts,
-            options.addDept,
-            options.deleteDept,
-            options.viewAllRoles,
-            options.addRole,
-            options.deleteRole,
-            options.viewAllEmps,
-            options.addEmp,
-            options.deleteEmp,
-            options.updateEmpRole,
-            options.viewEmpByManager,
-            options.updateEmpsManager,
-            options.viewEmpByDept,
-            options.viewDeptBudget
-        ]
-    })
+    inquirer
+        .prompt({
+            type: "list",
+            name: "selection",
+            message: "What would you like to do?",
+            choices: [
+                options.viewAllDepts,
+                options.addDept,
+                options.deleteDept,
+                options.viewAllRoles,
+                options.addRole,
+                options.deleteRole,
+                options.viewAllEmps,
+                options.addEmp,
+                options.deleteEmp,
+                options.updateEmpRole,
+                options.viewEmpByManager,
+                options.updateEmpsManager,
+                options.viewEmpByDept,
+                options.viewDeptBudget
+            ]
+        })
 }
