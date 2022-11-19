@@ -1,8 +1,7 @@
 // List of dependencies
 const mysql2 = require('mysql2');
-import inquirer from 'inquirer';
+const inquirer = require("inquirer");
 require("console.table");
-// const chalk = require('chalk');
 require('dotenv').config();
 
 // Create mysql connection
@@ -18,8 +17,8 @@ connection.connect(err => {
     startPrompt();
 })
 
-// List of options for answers
-const options = {
+// List of promptMessages for answers
+const promptMessages = {
     viewAllDepts: "View all departments",
     viewAllRoles: "View all roles",
     viewAllEmps: "View all employees",
@@ -33,7 +32,8 @@ const options = {
     viewEmpByDept: "View employees by department",
     viewEmpByManager: "View an employee by manager",
     updateEmpsManager: "Update an employee's manager",
-    viewDeptBudget: "View a department's budget"
+    viewDeptBudget: "View a department's budget",
+    exit: "Exit"
 }
 
 function startPrompt() {
@@ -42,22 +42,85 @@ function startPrompt() {
         .prompt({
             type: "list",
             name: "selection",
-            message: "What would you like to do?",
+            message: 'What would you like to do?',
             choices: [
-                options.viewAllDepts,
-                options.addDept,
-                options.deleteDept,
-                options.viewAllRoles,
-                options.addRole,
-                options.deleteRole,
-                options.viewAllEmps,
-                options.addEmp,
-                options.deleteEmp,
-                options.updateEmpRole,
-                options.viewEmpByManager,
-                options.updateEmpsManager,
-                options.viewEmpByDept,
-                options.viewDeptBudget
+                promptMessages.viewAllDepts,
+                promptMessages.addDept,
+                promptMessages.deleteDept,
+                promptMessages.viewAllRoles,
+                promptMessages.addRole,
+                promptMessages.deleteRole,
+                promptMessages.viewAllEmps,
+                promptMessages.addEmp,
+                promptMessages.deleteEmp,
+                promptMessages.updateEmpRole,
+                promptMessages.viewEmpByManager,
+                promptMessages.updateEmpsManager,
+                promptMessages.viewEmpByDept,
+                promptMessages.viewDeptBudget,
+                promptMessages.exit
             ]
-        })
-}
+        }).then(answer => {
+            switch (answer.selection) {
+                case promptMessages.viewAllDepts:
+                    viewAllDepts();
+                    break;
+
+                case promptMessages.addDept:
+                    addDept();
+                    break;
+
+                case promptMessages.deleteDept:
+                    deleteDept();
+                    break;
+
+                case promptMessages.viewAllRoles:
+                    viewAllRoles();
+                    break;
+
+                case promptMessages.addRole:
+                    addRole();
+                    break;
+
+                case promptMessages.deleteRole:
+                    deleteRole();
+                    break;
+
+                case promptMessages.viewAllEmps:
+                    viewAllEmps();
+                    break;
+
+                case promptMessages.addEmp:
+                    addEmp();
+                    break;
+
+                case promptMessages.deleteEmp:
+                    deleteEmp();
+                    break;
+
+                case promptMessages.updateEmpRole:
+                    updateEmpRole();
+                    break;
+
+                case promptMessages.viewEmpByManager:
+                    viewEmpByManager();
+                    break;
+
+                case promptMessages.updateEmpsManager:
+                    updateEmpsManager();
+                    break;
+
+                case promptMessages.viewEmpByDept:
+                    viewEmpByDept();
+                    break;
+
+                case promptMessages.viewDeptBudget:
+                    viewDeptBudget();
+                    break;
+
+                case promptMessages.exit:
+                    connection.end();
+                    break;
+            }
+        });
+};
