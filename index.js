@@ -112,7 +112,11 @@ function startPrompt() {
 // View all depts
 const viewAllDepts = async () => {
     console.log("All current departments:");
-    const allDeps = await connection.promise().query("SELECT * FROM department;");
+    const allDeps = await connection
+        .promise()
+        .query(
+            "SELECT * FROM department;"
+        );
     console.table(allDeps[0]);
     startPrompt();
 };
@@ -130,7 +134,11 @@ function addDept(deptName) {
 // View all roles
 const viewAllRoles = async () => {
     console.log("All current roles:");
-    const allRoles = await connection.promise().query("SELECT title, salary, department.name FROM role JOIN department on role.department_id = department_id;");
+    const allRoles = await connection
+        .promise()
+        .query(
+            "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
+        );
     console.table(allRoles[0]);
     startPrompt();
 };
