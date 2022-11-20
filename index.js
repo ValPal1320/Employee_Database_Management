@@ -153,6 +153,17 @@ function addRole(roleName, salary, deptId) {
     });
 };
 
+const viewAllEmps = async () => {
+    console.log("All current employees:");
+    const allEmps = await connection
+        .promise()
+        .query(
+            "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, manager_id AS manager ID FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id LEFT OUTER JOIN employee mgr ON employee.manager_id = mgr.id;"
+        );
+    console.log(allEmps[0]);
+    startPrompt();
+};
+
 
 
 
