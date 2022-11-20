@@ -26,13 +26,6 @@ const promptMessages = {
     addRole: "Add a role",
     addEmp: "Add an employee",
     updateEmpRole: "Update an employee's role",
-    deleteDept: "Delete a department",
-    deleteRole: "Delete a role",
-    deleteEmp: "Delete an employee",
-    viewEmpByDept: "View employees by department",
-    viewEmpByManager: "View an employee by manager",
-    updateEmpsManager: "Update an employee's manager",
-    viewDeptBudget: "View a department's budget",
     exit: "Exit"
 }
 
@@ -40,24 +33,17 @@ function startPrompt() {
 
     inquirer
         .prompt({
-            type: "list",
-            name: "selection",
+            type: 'list',
+            name: 'selection',
             message: 'What would you like to do?',
             choices: [
                 promptMessages.viewAllDepts,
                 promptMessages.addDept,
-                promptMessages.deleteDept,
                 promptMessages.viewAllRoles,
                 promptMessages.addRole,
-                promptMessages.deleteRole,
                 promptMessages.viewAllEmps,
                 promptMessages.addEmp,
-                promptMessages.deleteEmp,
                 promptMessages.updateEmpRole,
-                promptMessages.viewEmpByManager,
-                promptMessages.updateEmpsManager,
-                promptMessages.viewEmpByDept,
-                promptMessages.viewDeptBudget,
                 promptMessages.exit
             ]
         }).then(answer => {
@@ -66,12 +52,16 @@ function startPrompt() {
                     viewAllDepts();
                     break;
 
+                // Add a new dept
                 case promptMessages.addDept:
-                    addDept();
-                    break;
-
-                case promptMessages.deleteDept:
-                    deleteDept();
+                    inquirer
+                        .prompt([{
+                            type: 'input',
+                            name: 'deptName',
+                            message: 'Type department name: '
+                        }]).then((answer) => {
+                            addDept(answer.deptName);
+                        })
                     break;
 
                 case promptMessages.viewAllRoles:
@@ -82,10 +72,6 @@ function startPrompt() {
                     addRole();
                     break;
 
-                case promptMessages.deleteRole:
-                    deleteRole();
-                    break;
-
                 case promptMessages.viewAllEmps:
                     viewAllEmps();
                     break;
@@ -94,28 +80,8 @@ function startPrompt() {
                     addEmp();
                     break;
 
-                case promptMessages.deleteEmp:
-                    deleteEmp();
-                    break;
-
                 case promptMessages.updateEmpRole:
                     updateEmpRole();
-                    break;
-
-                case promptMessages.viewEmpByManager:
-                    viewEmpByManager();
-                    break;
-
-                case promptMessages.updateEmpsManager:
-                    updateEmpsManager();
-                    break;
-
-                case promptMessages.viewEmpByDept:
-                    viewEmpByDept();
-                    break;
-
-                case promptMessages.viewDeptBudget:
-                    viewDeptBudget();
                     break;
 
                 case promptMessages.exit:
@@ -124,3 +90,23 @@ function startPrompt() {
             }
         });
 };
+
+// View all depts
+const viewAllDepts = async () => {
+    console.log("All current departments:");
+    const allDeps = await connection.promise().query("SELECT * FROM department;");
+    console.table(allDeps[0]);
+    startPrompt();
+};
+
+// Add a new dept
+function addDept(deptName) {
+    const mysql2 = `INSERT INTO department (name) VALUES ("${deptName}")`;
+    connection.query(mysql2, deptName, (err, rows) => {
+        if (err) throw err;
+        console.log("Department successfully added to the table")
+        startPrompt();
+    })
+}
+
+
