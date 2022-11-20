@@ -68,8 +68,26 @@ function startPrompt() {
                     viewAllRoles();
                     break;
 
+                // Add a new role
                 case promptMessages.addRole:
-                    addRole();
+                    inquirer
+                        .prompt([{
+                            type: 'input',
+                            name: 'roleName',
+                            message: 'Type role name: '
+                        },
+                        {
+                            type: 'input',
+                            name: 'salary',
+                            message: 'Type salary for the role: '
+                        },
+                        {
+                            type: 'input',
+                            name: 'deptId',
+                            message: 'Department ID: '
+                        }]).then((answer) => {
+                            addRole(answer.roleName, answer.salary, answer.deptId);
+                        })
                     break;
 
                 case promptMessages.viewAllEmps:
@@ -106,7 +124,27 @@ function addDept(deptName) {
         if (err) throw err;
         console.log("Department successfully added to the table")
         startPrompt();
-    })
-}
+    });
+};
+
+// View all roles
+const viewAllRoles = async () => {
+    console.log("All current roles:");
+    const allRoles = await connection.promise().query("SELECT title, salary, department.name FROM role JOIN department on role.department_id = department_id;");
+    console.table(allRoles[0]);
+    startPrompt();
+};
+
+// Add a new role
+function addRole(roleName, salary, deptId) {
+    const mysql2 = `INSERT INTO role (title, salary, department_id) VALUES ("${roleName}", "${salary}", "${deptId}")`;
+    connection.query(mysql2, (err, rows) => {
+        if (err) throw err;
+        console.log("New role successfully added to the table")
+        startPrompt();
+    });
+};
+
+
 
 
