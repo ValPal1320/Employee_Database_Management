@@ -121,8 +121,21 @@ function startPrompt() {
                         })
                     break;
 
+                // Update an employee's role
                 case promptMessages.updateEmpRole:
-                    updateEmpRole();
+                    inquirer
+                        .prompt([{
+                            type: 'input',
+                            name: 'empId',
+                            message: 'ID of Employee to update: '
+                        }, {
+                            type: 'input',
+                            name: 'newRole',
+                            message: "What is employee's new role?: "
+                        }])
+                        .then((answer) => {
+                            updateEmpRole(answer.empId, answer.newRole);
+                        })
                     break;
 
                 case promptMessages.exit:
@@ -192,6 +205,7 @@ const viewAllEmps = async () => {
     startPrompt();
 };
 
+// Add a new employee
 function addEmp(firstName, lastName, role, managerId) {
     const mysql2 = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${firstName}", "${lastName}", "${role}", "${managerId}")`;
     connection.query(mysql2, (err, rows) => {
@@ -199,8 +213,13 @@ function addEmp(firstName, lastName, role, managerId) {
         console.log("New employee successfully added to the table")
         startPrompt();
     });
-}
+};
 
-
-
-
+function updateEmpRole(empId, newRole) {
+    const mysql2 = `UPDATE employee SET role_id = "${newRole}" WHERE id = "${empId}";`
+    connection.query(mysql2, (err, rows) => {
+        if (err) throw err;
+        console.log("Employee's new role successfully updated!");
+        startPrompt();
+    });
+};
